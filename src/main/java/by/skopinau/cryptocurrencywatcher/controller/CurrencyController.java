@@ -1,5 +1,6 @@
 package by.skopinau.cryptocurrencywatcher.controller;
 
+import by.skopinau.cryptocurrencywatcher.dal.entity.Currency;
 import by.skopinau.cryptocurrencywatcher.dto.CurrencyResponse;
 import by.skopinau.cryptocurrencywatcher.exception.CurrencyNotFoundException;
 import by.skopinau.cryptocurrencywatcher.mapper.CurrencyMapper;
@@ -7,10 +8,7 @@ import by.skopinau.cryptocurrencywatcher.service.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +22,13 @@ public class CurrencyController {
     public CurrencyController(CurrencyService currencyService) {
         this.currencyService = currencyService;
     }
-
+    // TODO: а што атрымае карыстальнік калі ўпадзе памылка?
     @GetMapping
     public List<CurrencyResponse> getAvailableCurrencies() {
         List<CurrencyResponse> currenciesResponse = new ArrayList<>();
 
         try {
-            currencyService.findAll()
-                    .forEach((currency -> currenciesResponse
-                            .add(CurrencyMapper.INSTANCE.currencyEntityToCurrencyResponse(currency))));
+            currencyService.findAll().forEach((currency -> currenciesResponse.add(CurrencyMapper.INSTANCE.currencyEntityToCurrencyResponse(currency))));
         } catch (CurrencyNotFoundException e) {
             e.printStackTrace();
         }
@@ -40,12 +36,13 @@ public class CurrencyController {
         return currenciesResponse;
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Double> getActualCurrencyPrice(@PathVariable("id") long id) {
+    @GetMapping("/")
+    public ResponseEntity<Double> getActualCurrencyPrice(@RequestParam String symbol) {
         ResponseEntity<Double> response = ResponseEntity.notFound().build();
 
         try {
-            Double price = currencyService.getPrice(id);
+            Currency currency = currencyService.findBySymbol(symbol);
+            Double price = currency.getPriceUsd();
             response = new ResponseEntity<>(price, HttpStatus.OK);
         } catch (CurrencyNotFoundException e) {
             e.printStackTrace();

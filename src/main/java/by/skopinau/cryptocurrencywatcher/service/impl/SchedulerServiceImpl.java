@@ -1,5 +1,6 @@
 package by.skopinau.cryptocurrencywatcher.service.impl;
 
+import by.skopinau.cryptocurrencywatcher.config.AppConfig;
 import by.skopinau.cryptocurrencywatcher.dal.entity.Currency;
 import by.skopinau.cryptocurrencywatcher.dal.entity.User;
 import by.skopinau.cryptocurrencywatcher.service.CurrencyService;
@@ -16,8 +17,6 @@ import java.util.Locale;
 @Slf4j
 @Service
 public class SchedulerServiceImpl implements SchedulerService {
-    private static final long TIME_INTERVAL = 60000;
-
     private final CurrencyService currencyService;
     private final UserService userService;
 
@@ -27,7 +26,11 @@ public class SchedulerServiceImpl implements SchedulerService {
         this.userService = userService;
     }
 
-    @Scheduled (fixedRate = TIME_INTERVAL)
+    private static double getPercentChange(double userPrice, double actualPrice) {
+        return ((actualPrice - userPrice) / userPrice) * 100;
+    }
+
+    @Scheduled(fixedRate = AppConfig.TIME_INTERVAL)
     public void checkCurrencies() {
         currencyService.updateAll();
 
@@ -40,14 +43,11 @@ public class SchedulerServiceImpl implements SchedulerService {
             double actualPrice = currency.getPriceUsd();
             double percent = getPercentChange(userPrice, actualPrice);
 
+            // TODO: multithreading
             if (percent < -1 || percent > 1) {
                 log.warn(String.format(Locale.US,
                         "%s %s %.2f", symbol, user.getUsername(), percent));
             }
         }
-    }
-
-    private static double getPercentChange(double userPrice, double actualPrice) {
-        return ((actualPrice - userPrice) / userPrice) * 100;
     }
 }

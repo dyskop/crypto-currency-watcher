@@ -1,5 +1,5 @@
 package by.skopinau.cryptocurrencywatcher.exception;
-
+// TODO: transfer messages
 public class CurrencyNotFoundException extends RuntimeException {
 
     public CurrencyNotFoundException() {

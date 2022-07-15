@@ -24,8 +24,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> notify(@RequestParam String username,
-                                       @RequestParam String symbol) {
+    public ResponseEntity<User> notify(@RequestParam String username, @RequestParam String symbol) {
         ResponseEntity<User> response = ResponseEntity.badRequest().build();
 
         try {

@@ -64,13 +64,13 @@ class CurrencyRestControllerIntegrationTest {
     }
 
     @Test
-    public void givenCurrencyId_whenGetActualCurrencyPrice_thenReturnCurrencyPriceObject()
+    public void givenCurrencySymbol_whenGetActualCurrencyPrice_thenReturnCurrencyPriceObject()
             throws Exception {
         // given
         Currency currency = currencyRepository.save(new Currency(90L, "BTC", 123.12));
 
         // when
-        ResultActions response = mockMvc.perform(get("/api/currencies/{id}", currency.getId())
+        ResultActions response = mockMvc.perform(get("/api/currencies/").param("symbol", currency.getSymbol())
                 .contentType(MediaType.APPLICATION_JSON));
 
         // then
@@ -80,14 +80,14 @@ class CurrencyRestControllerIntegrationTest {
     }
 
     @Test
-    public void givenCurrencyId_whenGetActualCurrencyPrice_thenReturnCurrencyPriceEmpty()
+    public void givenCurrencySymbol_whenGetActualCurrencyPrice_thenReturnCurrencyPriceEmpty()
             throws Exception {
         // given
-        long currencyId = 12345678;
-        Currency currency = currencyRepository.save(new Currency(90L, "BTC", 123.12));
+        String symbol = "ETH";
+        currencyRepository.save(new Currency(90L, "BTC", 123.12));
 
         // when
-        ResultActions response = mockMvc.perform(get("/api/currencies/{id}", currencyId)
+        ResultActions response = mockMvc.perform(get("/api/currencies/").param("symbol", symbol)
                 .contentType(MediaType.APPLICATION_JSON));
 
         // then

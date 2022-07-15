@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface CurrencyRepository extends JpaRepository<Currency, Long> {
     /**
      * Finds {@link Currency} by id.
+     *
      * @param id is used to define entity to find
      * @return {@link Currency}
      */
@@ -18,6 +19,7 @@ public interface CurrencyRepository extends JpaRepository<Currency, Long> {
 
     /**
      * Finds {@link Currency} by symbol.
+     *
      * @param symbol is used to define entity to find
      * @return {@link Currency}
      */

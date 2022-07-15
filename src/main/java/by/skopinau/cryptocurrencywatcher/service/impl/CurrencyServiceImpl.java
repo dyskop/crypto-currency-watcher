@@ -1,5 +1,6 @@
 package by.skopinau.cryptocurrencywatcher.service.impl;
 
+import by.skopinau.cryptocurrencywatcher.config.AppConfig;
 import by.skopinau.cryptocurrencywatcher.dal.entity.Currency;
 import by.skopinau.cryptocurrencywatcher.dal.repository.CurrencyRepository;
 import by.skopinau.cryptocurrencywatcher.dto.CurrencyRequest;
@@ -54,6 +55,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
     }
 
+    // TODO transactional
     @Override
     public void updateAll() {
         List<Currency> currencyList = currencyRepository.findAll();
@@ -63,11 +65,11 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
     }
 
-    private Currency getActualCurrency(long id) { // handle exception
-        String url = "https://api.coinlore.net/api/ticker/?id=" + id;
+    // TODO custom class
+    private Currency getActualCurrency(long id) {
         CurrencyRequest[] template = null;
         while (template == null) {
-            template = restTemplate.getForObject(url, CurrencyRequest[].class);
+            template = restTemplate.getForObject(String.format(AppConfig.URL, id), CurrencyRequest[].class);
         }
         return CurrencyMapper.INSTANCE.currencyRequestToCurrencyEntity(template[0]);
     }

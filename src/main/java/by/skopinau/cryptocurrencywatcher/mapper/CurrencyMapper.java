@@ -17,6 +17,7 @@ public interface CurrencyMapper {
     /**
      * Maps {@link CurrencyRequest} dto to
      * {@link Currency} entity.
+     *
      * @param currencyRequest is used to define dto to map
      * @return {@link Currency}
      */
@@ -25,6 +26,7 @@ public interface CurrencyMapper {
     /**
      * Maps {@link Currency} entity to
      * {@link CurrencyResponse} dto.
+     *
      * @param currency is used to define entity to map
      * @return {@link CurrencyResponse}
      */

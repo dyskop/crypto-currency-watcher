@@ -42,8 +42,8 @@ class UserRestControllerIntegrationTest {
 
         // when
         ResultActions response = mockMvc.perform(post("/api/users")
-                        .param("username", user.getUsername())
-                        .param("symbol", user.getSymbol())
+                .param("username", user.getUsername())
+                .param("symbol", user.getSymbol())
                 .contentType(MediaType.APPLICATION_JSON));
 
         // then
