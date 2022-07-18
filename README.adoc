@@ -19,4 +19,3 @@
 * Что бы получить актуальные цену по коду криптовалюты используйте open API https://www.coinlore.com/cryptocurrency-data-api#3[Crypto API | CoinLore]
 Меthod Ticker (Specific Coin): https://api.coinlore.net/api/ticker/?id=90 (BTC)
 * Когда пользователь запрашивает актуальную цену для указаной криптовалюты - данные должны быть получены из базы данных
-* опубликуйте свою работу на github как публичный проект и скинте на ссылку по почте mailto:yana.kobzar@idfinance.com.
