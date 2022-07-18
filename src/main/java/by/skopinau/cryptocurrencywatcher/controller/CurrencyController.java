@@ -22,18 +22,20 @@ public class CurrencyController {
     public CurrencyController(CurrencyService currencyService) {
         this.currencyService = currencyService;
     }
-    // TODO: а што атрымае карыстальнік калі ўпадзе памылка?
+
     @GetMapping
-    public List<CurrencyResponse> getAvailableCurrencies() {
+    public ResponseEntity<List<CurrencyResponse>> getAvailableCurrencies() {
+        ResponseEntity<List<CurrencyResponse>> response = ResponseEntity.noContent().build();
         List<CurrencyResponse> currenciesResponse = new ArrayList<>();
 
         try {
             currencyService.findAll().forEach((currency -> currenciesResponse.add(CurrencyMapper.INSTANCE.currencyEntityToCurrencyResponse(currency))));
+            response = new ResponseEntity<>(currenciesResponse, HttpStatus.OK);
         } catch (CurrencyNotFoundException e) {
             e.printStackTrace();
         }
 
-        return currenciesResponse;
+        return response;
     }
 
     @GetMapping("/")

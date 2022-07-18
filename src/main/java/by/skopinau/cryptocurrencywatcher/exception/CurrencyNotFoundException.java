@@ -1,16 +1,8 @@
 package by.skopinau.cryptocurrencywatcher.exception;
-// TODO: transfer messages
-public class CurrencyNotFoundException extends RuntimeException {
 
-    public CurrencyNotFoundException() {
-        super("Could not find any currency");
-    }
+public class CurrencyNotFoundException extends Exception {
 
-    public CurrencyNotFoundException(long id) {
-        super("Could not find currency " + id);
-    }
-
-    public CurrencyNotFoundException(String symbol) {
-        super("Could not find currency " + symbol);
+    public CurrencyNotFoundException(String message) {
+        super(message);
     }
 }

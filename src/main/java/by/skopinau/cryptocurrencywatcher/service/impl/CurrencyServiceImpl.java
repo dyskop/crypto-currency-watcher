@@ -5,6 +5,7 @@ import by.skopinau.cryptocurrencywatcher.dal.entity.Currency;
 import by.skopinau.cryptocurrencywatcher.dal.repository.CurrencyRepository;
 import by.skopinau.cryptocurrencywatcher.dto.CurrencyRequest;
 import by.skopinau.cryptocurrencywatcher.exception.CurrencyNotFoundException;
+import by.skopinau.cryptocurrencywatcher.exception.message.CurrencyMessage;
 import by.skopinau.cryptocurrencywatcher.mapper.CurrencyMapper;
 import by.skopinau.cryptocurrencywatcher.service.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         if (currencies.size() != 0) {
             return currencies;
         } else {
-            throw new CurrencyNotFoundException();
+            throw new CurrencyNotFoundException(CurrencyMessage.CURRENCY_NOT_FOUND.getMessage());
         }
     }
 
@@ -41,7 +42,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         if (Objects.nonNull(currency)) {
             return currency;
         } else {
-            throw new CurrencyNotFoundException(symbol);
+            throw new CurrencyNotFoundException(String.format(CurrencyMessage.CURRENCY_NOT_FOUND_BY_SYMBOL.getMessage(), symbol));
         }
     }
 
@@ -51,7 +52,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         if (Objects.nonNull(currency)) {
             return currency.getPriceUsd();
         } else {
-            throw new CurrencyNotFoundException(id);
+            throw new CurrencyNotFoundException(String.format(CurrencyMessage.CURRENCY_NOT_FOUND_BY_ID.getMessage(), id));
         }
     }
 

@@ -3,6 +3,7 @@ package by.skopinau.cryptocurrencywatcher.service.impl;
 import by.skopinau.cryptocurrencywatcher.config.AppConfig;
 import by.skopinau.cryptocurrencywatcher.dal.entity.Currency;
 import by.skopinau.cryptocurrencywatcher.dal.entity.User;
+import by.skopinau.cryptocurrencywatcher.exception.CurrencyNotFoundException;
 import by.skopinau.cryptocurrencywatcher.service.CurrencyService;
 import by.skopinau.cryptocurrencywatcher.service.SchedulerService;
 import by.skopinau.cryptocurrencywatcher.service.UserService;
@@ -37,16 +38,21 @@ public class SchedulerServiceImpl implements SchedulerService {
         List<User> userList = userService.findAll();
         for (User user : userList) {
             String symbol = user.getSymbol();
-            Currency currency = currencyService.findBySymbol(symbol);
 
-            double userPrice = user.getPrice();
-            double actualPrice = currency.getPriceUsd();
-            double percent = getPercentChange(userPrice, actualPrice);
+            try {
+                Currency currency = currencyService.findBySymbol(symbol);
 
-            // TODO: multithreading
-            if (percent < -1 || percent > 1) {
-                log.warn(String.format(Locale.US,
-                        "%s %s %.2f", symbol, user.getUsername(), percent));
+                double userPrice = user.getPrice();
+                double actualPrice = currency.getPriceUsd();
+                double percent = getPercentChange(userPrice, actualPrice);
+
+                // TODO: multithreading
+                if (percent < -1 || percent > 1) {
+                    log.warn(String.format(Locale.US,
+                            "%s %s %.2f", symbol, user.getUsername(), percent));
+                }
+            } catch (CurrencyNotFoundException e) {
+                e.printStackTrace();
             }
         }
     }
