@@ -1,16 +1,13 @@
 package by.skopinau.cryptocurrencywatcher.service.impl;
 
-import by.skopinau.cryptocurrencywatcher.config.AppConfig;
 import by.skopinau.cryptocurrencywatcher.dal.entity.Currency;
 import by.skopinau.cryptocurrencywatcher.dal.repository.CurrencyRepository;
-import by.skopinau.cryptocurrencywatcher.dto.CurrencyRequest;
 import by.skopinau.cryptocurrencywatcher.exception.CurrencyNotFoundException;
 import by.skopinau.cryptocurrencywatcher.exception.message.CurrencyMessage;
-import by.skopinau.cryptocurrencywatcher.mapper.CurrencyMapper;
 import by.skopinau.cryptocurrencywatcher.service.CurrencyService;
+import by.skopinau.cryptocurrencywatcher.service.util.CurrencyClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,12 +15,12 @@ import java.util.Objects;
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
     private final CurrencyRepository currencyRepository;
-    private final RestTemplate restTemplate;
+    private final CurrencyClient currencyClient;
 
     @Autowired
-    public CurrencyServiceImpl(CurrencyRepository currencyRepository, RestTemplate restTemplate) {
+    public CurrencyServiceImpl(CurrencyRepository currencyRepository, CurrencyClient currencyClient) {
         this.currencyRepository = currencyRepository;
-        this.restTemplate = restTemplate;
+        this.currencyClient = currencyClient;
     }
 
     @Override
@@ -61,17 +58,8 @@ public class CurrencyServiceImpl implements CurrencyService {
     public void updateAll() {
         List<Currency> currencyList = currencyRepository.findAll();
         for (Currency currency : currencyList) {
-            Currency actualCurrency = getActualCurrency(currency.getId());
+            Currency actualCurrency = currencyClient.getActualCurrency((currency.getId()));
             currencyRepository.save(actualCurrency);
         }
-    }
-
-    // TODO custom class
-    private Currency getActualCurrency(long id) {
-        CurrencyRequest[] template = null;
-        while (template == null) {
-            template = restTemplate.getForObject(String.format(AppConfig.URL, id), CurrencyRequest[].class);
-        }
-        return CurrencyMapper.INSTANCE.currencyRequestToCurrencyEntity(template[0]);
     }
 }
