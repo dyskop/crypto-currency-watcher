@@ -8,6 +8,7 @@ import by.skopinau.cryptocurrencywatcher.service.CurrencyService;
 import by.skopinau.cryptocurrencywatcher.service.util.CurrencyClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -53,8 +54,8 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
     }
 
-    // TODO transactional
     @Override
+    @Transactional
     public void updateAll() {
         List<Currency> currencyList = currencyRepository.findAll();
         for (Currency currency : currencyList) {
