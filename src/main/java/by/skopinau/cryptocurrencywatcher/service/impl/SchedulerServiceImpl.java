@@ -9,12 +9,14 @@ import by.skopinau.cryptocurrencywatcher.service.SchedulerService;
 import by.skopinau.cryptocurrencywatcher.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
 
+@EnableScheduling
 @Slf4j
 @Service
 public class SchedulerServiceImpl implements SchedulerService {
@@ -27,33 +29,33 @@ public class SchedulerServiceImpl implements SchedulerService {
         this.userService = userService;
     }
 
-    private static double getPercentChange(double userPrice, double actualPrice) {
-        return ((actualPrice - userPrice) / userPrice) * 100;
-    }
-
     @Scheduled(fixedRate = AppConfig.TIME_INTERVAL)
     public void checkCurrencies() {
         currencyService.updateAll();
-
         List<User> userList = userService.findAll();
-        for (User user : userList) {
-            String symbol = user.getSymbol();
+        userList.parallelStream().forEach(this::checkUserCurrency);
+    }
 
-            try {
-                Currency currency = currencyService.findBySymbol(symbol);
+    private void checkUserCurrency(User user) {
+        String symbol = user.getSymbol();
 
-                double userPrice = user.getPrice();
-                double actualPrice = currency.getPriceUsd();
-                double percent = getPercentChange(userPrice, actualPrice);
+        try {
+            Currency currency = currencyService.findBySymbol(symbol);
 
-                // TODO: multithreading
-                if (percent < -1 || percent > 1) {
-                    log.warn(String.format(Locale.US,
-                            "%s %s %.2f", symbol, user.getUsername(), percent));
-                }
-            } catch (CurrencyNotFoundException e) {
-                e.printStackTrace();
+            double userPrice = user.getPrice();
+            double actualPrice = currency.getPriceUsd();
+            double percent = getPercentChange(userPrice, actualPrice);
+
+            if (percent < -1 || percent > 1) {
+                log.warn(String.format(Locale.US,
+                        "%s %s %.2f", symbol, user.getUsername(), percent));
             }
+        } catch (CurrencyNotFoundException e) {
+            e.printStackTrace();
         }
+    }
+
+    private double getPercentChange(double userPrice, double actualPrice) {
+        return ((actualPrice - userPrice) / userPrice) * 100;
     }
 }
