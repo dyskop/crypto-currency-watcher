@@ -2,8 +2,8 @@ package by.skopinau.cryptocurrencywatcher.service.impl;
 
 import by.skopinau.cryptocurrencywatcher.dal.entity.Currency;
 import by.skopinau.cryptocurrencywatcher.dal.repository.CurrencyRepository;
-import by.skopinau.cryptocurrencywatcher.exception.CurrencyNotFoundException;
 import by.skopinau.cryptocurrencywatcher.exception.CoinLoreResponseException;
+import by.skopinau.cryptocurrencywatcher.exception.CurrencyNotFoundException;
 import by.skopinau.cryptocurrencywatcher.exception.message.CurrencyNotFoundMessage;
 import by.skopinau.cryptocurrencywatcher.service.CurrencyService;
 import by.skopinau.cryptocurrencywatcher.service.client.CurrencyClient;
