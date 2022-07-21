@@ -3,9 +3,10 @@ package by.skopinau.cryptocurrencywatcher.service.impl;
 import by.skopinau.cryptocurrencywatcher.dal.entity.Currency;
 import by.skopinau.cryptocurrencywatcher.dal.repository.CurrencyRepository;
 import by.skopinau.cryptocurrencywatcher.exception.CurrencyNotFoundException;
-import by.skopinau.cryptocurrencywatcher.exception.message.CurrencyMessage;
+import by.skopinau.cryptocurrencywatcher.exception.CoinLoreResponseException;
+import by.skopinau.cryptocurrencywatcher.exception.message.CurrencyNotFoundMessage;
 import by.skopinau.cryptocurrencywatcher.service.CurrencyService;
-import by.skopinau.cryptocurrencywatcher.service.util.CurrencyClient;
+import by.skopinau.cryptocurrencywatcher.service.client.CurrencyClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         if (currencies.size() != 0) {
             return currencies;
         } else {
-            throw new CurrencyNotFoundException(CurrencyMessage.CURRENCY_NOT_FOUND.getMessage());
+            throw new CurrencyNotFoundException(CurrencyNotFoundMessage.CURRENCY_NOT_FOUND.getMessage());
         }
     }
 
@@ -40,7 +41,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         if (Objects.nonNull(currency)) {
             return currency;
         } else {
-            throw new CurrencyNotFoundException(String.format(CurrencyMessage.CURRENCY_NOT_FOUND_BY_SYMBOL.getMessage(), symbol));
+            throw new CurrencyNotFoundException(String.format(CurrencyNotFoundMessage.CURRENCY_NOT_FOUND_BY_SYMBOL.getMessage(), symbol));
         }
     }
 
@@ -50,7 +51,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         if (Objects.nonNull(currency)) {
             return currency.getPriceUsd();
         } else {
-            throw new CurrencyNotFoundException(String.format(CurrencyMessage.CURRENCY_NOT_FOUND_BY_ID.getMessage(), id));
+            throw new CurrencyNotFoundException(String.format(CurrencyNotFoundMessage.CURRENCY_NOT_FOUND_BY_ID.getMessage(), id));
         }
     }
 
@@ -59,8 +60,12 @@ public class CurrencyServiceImpl implements CurrencyService {
     public void updateAll() {
         List<Currency> currencyList = currencyRepository.findAll();
         for (Currency currency : currencyList) {
-            Currency actualCurrency = currencyClient.getActualCurrency((currency.getId()));
-            currencyRepository.save(actualCurrency);
+            try {
+                Currency actualCurrency = currencyClient.getActualCurrency((currency.getId()));
+                currencyRepository.save(actualCurrency);
+            } catch (CoinLoreResponseException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
