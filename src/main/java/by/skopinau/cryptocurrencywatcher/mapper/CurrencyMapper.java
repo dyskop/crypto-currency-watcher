@@ -25,6 +25,15 @@ public interface CurrencyMapper {
 
     /**
      * Maps {@link Currency} entity to
+     * {@link CurrencyRequest} dto.
+     *
+     * @param currency is used to define entity to map
+     * @return {@link CurrencyRequest}
+     */
+    CurrencyRequest currencyEntityToCurrencyRequest(Currency currency);
+
+    /**
+     * Maps {@link Currency} entity to
      * {@link CurrencyResponse} dto.
      *
      * @param currency is used to define entity to map

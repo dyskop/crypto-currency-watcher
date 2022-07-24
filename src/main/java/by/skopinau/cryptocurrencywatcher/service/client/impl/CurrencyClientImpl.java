@@ -18,7 +18,7 @@ public class CurrencyClientImpl implements CurrencyClient {
         this.webClient = webClient;
     }
 
-    public Currency getActualCurrency(long id) throws CoinLoreResponseException {
+    public Currency getActualCurrency(long id) {
         CurrencyRequest[] currencyRequests = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/api/ticker/")

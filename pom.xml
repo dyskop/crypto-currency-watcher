@@ -19,6 +19,9 @@
     <properties>
         <java.version>11</java.version>
         <testcontainers.version>1.17.3</testcontainers.version>
+        <mockito.version>4.6.1</mockito.version>
+        <assertj.version>3.23.1</assertj.version>
+        <okhttp3.version>4.10.0</okhttp3.version>
         <jackson-databind.version>2.13.3</jackson-databind.version>
         <lombok.version>1.18.24</lombok.version>
         <mapstruct.version>1.5.1.Final</mapstruct.version>
@@ -63,6 +66,36 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp3.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>${okhttp3.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

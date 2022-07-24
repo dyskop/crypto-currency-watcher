@@ -14,7 +14,7 @@ public interface CurrencyService {
      *
      * @return {@link List<Currency>}
      * @throws CurrencyNotFoundException if
-     *                                   there is no entity in the database
+     * there is no entity in the database
      */
     List<Currency> findAll() throws CurrencyNotFoundException;
 

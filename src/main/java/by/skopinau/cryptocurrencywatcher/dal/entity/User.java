@@ -29,6 +29,13 @@ public class User {
         this.price = price;
     }
 
+    public User(UUID id, String username, String symbol, Double price) {
+        this.id = id;
+        this.username = username;
+        this.symbol = symbol;
+        this.price = price;
+    }
+
     public UUID getId() {
         return id;
     }
