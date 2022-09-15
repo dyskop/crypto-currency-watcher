@@ -1,0 +1,103 @@
+{
+	"info": {
+		"_postman_id": "0d16c4cc-b8f3-4ceb-946b-b79466a864bb",
+		"name": "crypto-currency-watcher-requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18857418"
+	},
+	"item": [
+		{
+			"name": "View Available Currencies Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/currencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Actual Price of the Currency Request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/currencies/?symbol=SOL",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"currencies",
+						""
+					],
+					"query": [
+						{
+							"key": "symbol",
+							"value": "SOL"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Registration Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users?username=user3&symbol=SOL",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "user"
+						},
+						{
+							"key": "symbol",
+							"value": "SOL"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
